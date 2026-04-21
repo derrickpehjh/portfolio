@@ -90,6 +90,127 @@
         .mesh-glow {
             background: radial-gradient(circle at 50% 50%, rgba(94, 234, 212, 0.05) 0%, transparent 70%);
         }
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(26px) scale(0.985);
+                filter: blur(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+        @keyframes subtle-drift {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(0, -14px, 0) scale(1.015); }
+            100% { transform: translate3d(0, 0, 0) scale(1); }
+        }
+        .mesh-glow {
+            animation: subtle-drift 14s ease-in-out infinite;
+        }
+        #overview .space-y-6 > * {
+            opacity: 0;
+            animation: fade-up 950ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        #overview .space-y-6 > *:nth-child(1) { animation-delay: 100ms; }
+        #overview .space-y-6 > *:nth-child(2) { animation-delay: 220ms; }
+        #overview .space-y-6 > *:nth-child(3) { animation-delay: 340ms; }
+        #overview .space-y-6 > *:nth-child(4) { animation-delay: 460ms; }
+        .reveal {
+            opacity: 0;
+            transform: translateY(34px) scale(0.985);
+            filter: blur(8px);
+            transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1), transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 900ms cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform, filter;
+        }
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .mesh-glow {
+                animation: none;
+            }
+            #overview .space-y-6 > * {
+                opacity: 1;
+                animation: none;
+            }
+            .reveal,
+            .reveal.is-visible {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .project-shot,
+            .group:hover .project-shot {
+                transform: none;
+            }
+            .project-card,
+            .project-card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            .project-card::after {
+                display: none;
+            }
+        }
+        .project-shot {
+            filter: grayscale(0.25) saturate(0.72) contrast(0.95) brightness(0.62);
+            transform: translate3d(0, var(--parallax, 0px), 0) scale(1.06);
+            transition: transform 1000ms cubic-bezier(0.22, 1, 0.36, 1), filter 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .group:hover .project-shot {
+            filter: grayscale(0.1) saturate(0.86) contrast(1) brightness(0.74);
+            transform: translate3d(0, var(--parallax, 0px), 0) scale(1.12);
+        }
+        .project-card {
+            --mx: 50%;
+            --my: 50%;
+            transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 700ms cubic-bezier(0.22, 1, 0.36, 1), border-color 700ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 46px rgba(0, 0, 0, 0.38);
+            border-color: rgba(94, 234, 212, 0.22);
+        }
+        .project-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            opacity: 0;
+            background: radial-gradient(260px circle at var(--mx) var(--my), rgba(94, 234, 212, 0.2), rgba(94, 234, 212, 0.06) 35%, rgba(19, 19, 19, 0) 65%);
+            transition: opacity 350ms ease;
+            z-index: 2;
+        }
+        .project-card:hover::after {
+            opacity: 1;
+        }
+        .project-tag {
+            padding: 0.26rem 0.62rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(60, 73, 70, 0.35);
+            background: rgba(53, 53, 52, 0.65);
+            font-family: 'Geist Mono', monospace;
+            font-size: 10px;
+            color: #b5fff0;
+            letter-spacing: 0.04em;
+            line-height: 1;
+        }
+        .project-overlay {
+            background:
+                linear-gradient(180deg, rgba(19, 19, 19, 0.12) 0%, rgba(19, 19, 19, 0.78) 58%, rgba(19, 19, 19, 0.94) 100%),
+                radial-gradient(circle at 82% 12%, rgba(94, 234, 212, 0.14), transparent 38%);
+        }
+        .project-overlay-wide {
+            background:
+                linear-gradient(90deg, rgba(19, 19, 19, 0.92) 0%, rgba(19, 19, 19, 0.84) 50%, rgba(19, 19, 19, 0.55) 100%),
+                radial-gradient(circle at 80% 20%, rgba(94, 234, 212, 0.1), transparent 44%);
+        }
     </style>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
@@ -106,28 +227,40 @@
 <a class="text-[#859490] font-['Geist_Mono'] text-sm uppercase tracking-widest hover:text-[#5eead4] transition-colors duration-300" href="#projects">Projects</a>
 <a class="text-[#859490] font-['Geist_Mono'] text-sm uppercase tracking-widest hover:text-[#5eead4] transition-colors duration-300" href="#arsenal">Arsenal</a>
 </div>
+<div class="flex items-center gap-3">
+<a aria-label="GitHub" class="w-10 h-10 rounded-lg border border-outline-variant/20 bg-surface-container-low text-outline hover:text-primary hover:border-primary/40 transition-all inline-flex items-center justify-center" href="https://github.com/derrickpehjh/" rel="noreferrer" target="_blank">
+<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+<path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.2.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.2-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 2.1.2 2.7-.7.1-.7.4-1.2.7-1.5-2.7-.3-5.5-1.4-5.5-6A4.7 4.7 0 0 1 5 7.2a4.4 4.4 0 0 1 .1-3.2s1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2a4.4 4.4 0 0 1 .1 3.2 4.7 4.7 0 0 1 1.3 3.2c0 4.6-2.8 5.6-5.5 6 .4.3.8 1 .8 2.1v3.2c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/>
+</svg>
+</a>
+<a aria-label="LinkedIn" class="w-10 h-10 rounded-lg border border-outline-variant/20 bg-surface-container-low text-outline hover:text-primary hover:border-primary/40 transition-all inline-flex items-center justify-center" href="https://www.linkedin.com/in/derrickpehjh/" rel="noreferrer" target="_blank">
+<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+<path d="M20.4 20.5h-3.6v-5.7c0-1.4 0-3.1-1.9-3.1s-2.2 1.5-2.2 3v5.8H9V9h3.4v1.6h.1c.5-.9 1.6-1.9 3.4-1.9 3.7 0 4.4 2.4 4.4 5.6v6.2ZM5 7.4a2.1 2.1 0 1 1 0-4.3 2.1 2.1 0 0 1 0 4.3ZM6.8 20.5H3.2V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .7 0 1.7v20.6C0 23.3.8 24 1.8 24h20.4c1 0 1.8-.7 1.8-1.7V1.7C24 .7 23.2 0 22.2 0Z"/>
+</svg>
+</a>
+</div>
 </div>
 </nav>
 <main class="pt-20">
 <!-- Hero Section -->
-<section class="relative min-h-[921px] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto overflow-hidden" id="overview">
+<section class="relative min-h-[62vh] md:min-h-[68vh] lg:min-h-[72vh] flex flex-col justify-center px-6 md:px-12 py-10 md:py-12 max-w-7xl mx-auto overflow-hidden" id="overview">
 <div class="absolute inset-0 mesh-glow -z-10"></div>
-<div class="space-y-6 max-w-4xl">
+<div class="space-y-4 md:space-y-5 max-w-3xl">
 <div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-highest rounded-full border border-outline-variant/20">
 <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
 <span class="mono-text text-xs text-primary uppercase tracking-widest">Singapore · Open to roles + freelance</span>
 </div>
-<h1 class="text-6xl md:text-8xl font-bold tracking-tighter text-on-surface leading-[0.9]">
+<h1 class="text-4xl md:text-6xl font-bold tracking-tighter text-on-surface leading-[0.94]">
                     Derrick Peh
                 </h1>
-<p class="text-xl md:text-2xl text-outline max-w-2xl leading-relaxed">
+<p class="text-base md:text-lg text-outline max-w-xl leading-relaxed">
                     Senior Backend Engineer specializing in <span class="text-on-surface">AI Infrastructure</span> and <span class="text-on-surface">Scalable Streaming Pipelines</span>. Building the architectural monoliths of tomorrow.
                 </p>
-<div class="flex flex-wrap gap-4 pt-4">
-<button class="bg-primary-container text-on-primary-container px-8 py-4 font-mono font-bold rounded-lg flex items-center gap-2 hover:opacity-90 transition-all">
+<div class="flex flex-wrap gap-3 pt-1">
+<a class="bg-primary-container text-on-primary-container px-7 py-3.5 font-mono font-bold rounded-lg flex items-center gap-2 hover:opacity-90 transition-all" href="mailto:derrickpehjh@gmail.com?subject=Portfolio%20Inquiry">
                         Connect <span class="material-symbols-outlined">arrow_outward</span>
-</button>
-<a class="border border-outline/20 text-primary px-8 py-4 font-mono font-bold rounded-lg hover:bg-surface-container-high transition-all inline-flex items-center justify-center" href="resources/Resume_Derrick_Peh_Jia_Hao.pdf" download>
+</a>
+<a class="border border-outline/20 text-primary px-7 py-3.5 font-mono font-bold rounded-lg hover:bg-surface-container-high transition-all inline-flex items-center justify-center" href="resources/Resume_Derrick_Peh_Jia_Hao.pdf" download>
                         View Resume
                     </a>
 </div>
@@ -149,41 +282,62 @@
 <div class="aspect-square bg-surface-container rounded-xl overflow-hidden ghost-border relative group">
 <img alt="Abstract architectural lines" class="w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700" data-alt="Monochromatic architectural photography focusing on clean sharp lines and geometric shadows in a brutalist style with deep blacks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwKByp3YiFzvksbJRqQUPltvXlUtgRc20C4LtkGvet3xpS6m-jMYUoLra8Ak9iA34cTMVwak7VzxY3VaOofPxLnwHQ9HnVodOVTLINHE4il2aENoGqrypGxt9ByQyC2FFhQ95l_rSKmqV7RX_ovCkGnZ99zUjyZVA-tJg3Rj7JTjIxo6z8889cZi-UnXbwzz58Ub6cDKIjWH93O5lTekKlfaqXWG9th_75KwkpiaciIEgtmAftMTStlJ-inxnsP2Hg8WtHBPvRmmYP"/>
 <div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
-<div class="absolute bottom-8 left-8">
-<p class="mono-text text-primary text-2xl font-bold">PRECISION_UNIT_01</p>
-<p class="mono-text text-outline text-sm">ARCHITECTURAL INTEGRITY VERIFIED</p>
-</div>
 </div>
 </div>
 </section>
 <!-- Work History Section -->
 <section class="py-32 px-6 md:px-12 max-w-7xl mx-auto" id="experience">
 <h2 class="mono-text text-primary text-sm uppercase tracking-[0.3em] mb-16">02 // Professional Timeline</h2>
-<div class="space-y-px bg-outline-variant/10 rounded-xl overflow-hidden border border-outline-variant/10">
-<!-- Current -->
-<div class="bg-surface-container-low p-8 md:p-12 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-surface-container transition-colors">
-<div class="space-y-2">
-<div class="flex items-center gap-3">
-<span class="w-3 h-3 rounded-full bg-primary shadow-[0_0_10px_#5eead4]"></span>
-<h3 class="text-2xl font-bold text-on-surface">Independent / Building</h3>
+<div class="relative space-y-px pl-0 md:pl-10">
+<span class="hidden md:block absolute left-3 top-2 bottom-2 w-px bg-gradient-to-b from-primary/50 via-outline-variant/35 to-transparent"></span>
+<!-- HPE Current -->
+<div class="relative bg-surface-container-low/90 rounded-2xl border border-outline-variant/20 p-7 md:p-10 hover:border-primary/35 hover:bg-surface-container transition-all">
+<span class="hidden md:block absolute -left-[1.95rem] top-10 w-4 h-4 rounded-full bg-primary shadow-[0_0_14px_rgba(94,234,212,0.75)] ring-4 ring-surface"></span>
+<div class="grid grid-cols-1 md:grid-cols-[1.2fr_1.8fr] gap-8">
+<div>
+<p class="mono-text text-xs uppercase tracking-[0.2em] text-primary mb-3">Current Role</p>
+<h3 class="text-2xl md:text-3xl font-bold text-on-surface tracking-tight">HPE · Senior Software Engineer</h3>
+<p class="text-outline mono-text mt-2">Jan 2025 - Present</p>
+<div class="flex flex-wrap gap-2 mt-5">
+<span class="project-tag">TRITON</span>
+<span class="project-tag">KSERVE</span>
+<span class="project-tag">KAFKA</span>
+<span class="project-tag">KUBERNETES</span>
 </div>
-<p class="text-outline mono-text">Nov 2025 - Present</p>
 </div>
-<div class="md:text-right max-w-md">
-<p class="text-on-surface-variant italic">Architecting private AI-integrated infrastructure and building modern backend tooling for high-performance scale.</p>
+<div class="space-y-4">
+<p class="text-on-surface-variant leading-relaxed">Driving real-time AI inference and streaming architecture for production workloads by integrating NVIDIA Triton and KServe into backend delivery pipelines.</p>
+<ul class="space-y-2 text-sm text-outline leading-relaxed">
+<li class="flex gap-2"><span class="text-primary mt-0.5">•</span><span>Built Kafka and NVIDIA Morpheus workflows for high-throughput event processing and security-centric inference orchestration.</span></li>
+<li class="flex gap-2"><span class="text-primary mt-0.5">•</span><span>Shipped containerized Python and Django services on Docker, Kubernetes, and Rancher with reliability and operability in mind.</span></li>
+<li class="flex gap-2"><span class="text-primary mt-0.5">•</span><span>Improved deployment consistency and reduced delivery friction across environments through tighter platform integration.</span></li>
+</ul>
 </div>
 </div>
-<!-- HPE -->
-<div class="bg-surface-container-low p-8 md:p-12 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-surface-container transition-colors">
-<div class="space-y-2">
-<div class="flex items-center gap-3">
-<span class="w-3 h-3 rounded-full bg-surface-container-highest"></span>
-<h3 class="text-2xl font-bold text-on-surface">HPE · Senior Backend Engineer</h3>
 </div>
-<p class="text-outline mono-text">Aug 2021 - Nov 2025</p>
+<!-- HPE Previous -->
+<div class="relative mt-4 bg-surface-container-low/90 rounded-2xl border border-outline-variant/20 p-7 md:p-10 hover:border-primary/25 hover:bg-surface-container transition-all">
+<span class="hidden md:block absolute -left-[1.95rem] top-10 w-4 h-4 rounded-full bg-surface-container-highest ring-4 ring-surface"></span>
+<div class="grid grid-cols-1 md:grid-cols-[1.2fr_1.8fr] gap-8">
+<div>
+<p class="mono-text text-xs uppercase tracking-[0.2em] text-outline mb-3">Foundation Role</p>
+<h3 class="text-2xl md:text-3xl font-bold text-on-surface tracking-tight">HPE · Software Engineer</h3>
+<p class="text-outline mono-text mt-2">Jul 2019 - Dec 2024</p>
+<div class="flex flex-wrap gap-2 mt-5">
+<span class="project-tag">IOT</span>
+<span class="project-tag">ANALYTICS</span>
+<span class="project-tag">NVIDIA-HPE</span>
+<span class="project-tag">AWARD WINNING</span>
 </div>
-<div class="md:text-right max-w-md">
-<p class="text-on-surface-variant">Led engineering for large-scale data ingestion and streaming pipelines. Spearheaded internal AI infrastructure initiatives and cross-team integration.</p>
+</div>
+<div class="space-y-4">
+<p class="text-on-surface-variant leading-relaxed">Delivered full-stack product engineering for data-intensive IoT initiatives, from field telemetry capture to analytics and business-facing platform capabilities.</p>
+<ul class="space-y-2 text-sm text-outline leading-relaxed">
+<li class="flex gap-2"><span class="text-primary mt-0.5">•</span><span>Led an end-to-end IoT aquaculture solution spanning device integration, backend services, and operational dashboards.</span></li>
+<li class="flex gap-2"><span class="text-primary mt-0.5">•</span><span>Contributed Smart IoT and analytics tooling while supporting NVIDIA-HPE Alliance solution engineering initiatives.</span></li>
+<li class="flex gap-2"><span class="text-primary mt-0.5">•</span><span>Received the HPE Innovation Award 2023 for contributions to the Customer Profile Engine program.</span></li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -196,66 +350,117 @@
 <h2 class="mono-text text-primary text-sm uppercase tracking-[0.3em] mb-4">03 // Selected Works</h2>
 <p class="text-3xl font-bold text-on-surface tracking-tight">Engineering Solutions for Real-world Scale.</p>
 </div>
-<a class="hidden md:flex items-center gap-2 text-primary mono-text text-sm hover:underline" href="#">VIEW ALL REPOS <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+<a class="hidden md:flex items-center gap-2 text-primary mono-text text-sm hover:underline" href="https://github.com/derrickpehjh/portfolio" target="_blank" rel="noreferrer">VIEW ALL REPOS <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px]">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[280px] md:auto-rows-[300px]">
 <!-- FinSight -->
-<div class="md:col-span-8 md:row-span-2 bg-surface-container rounded-xl p-8 flex flex-col justify-between ghost-border group relative overflow-hidden">
-<div class="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity">
-<span class="material-symbols-outlined text-9xl">analytics</span>
+<div class="project-card md:order-1 md:col-span-8 md:row-span-2 bg-surface-container rounded-xl overflow-hidden ghost-border group relative">
+<div class="absolute inset-0">
+<img alt="FinSight Dashboard screenshot" class="project-shot w-full h-full object-cover group-hover:scale-105" src="resources/finsight%20ss.png"/>
 </div>
-<div class="relative z-10">
-<div class="flex gap-2 mb-4">
-<span class="px-3 py-1 bg-surface-container-highest rounded-full mono-text text-[10px] text-primary">NEXT.JS 14</span>
-<span class="px-3 py-1 bg-surface-container-highest rounded-full mono-text text-[10px] text-primary">FASTAPI</span>
-<span class="px-3 py-1 bg-surface-container-highest rounded-full mono-text text-[10px] text-primary">QDRANT</span>
-</div>
+<div class="absolute inset-0 project-overlay"></div>
+<div class="relative z-10 h-full p-8 flex flex-col justify-between">
+<div class="max-w-md">
 <h3 class="text-4xl font-bold mb-4 tracking-tighter">FinSight Dashboard</h3>
-<p class="text-outline max-w-md leading-relaxed">A high-performance financial intelligence engine utilizing vector search for real-time document analysis and predictive modeling.</p>
+<p class="text-outline leading-relaxed">Real-time financial sentiment dashboard with 5-minute ingestion, FinBERT scoring, Qdrant-backed RAG, and interactive chart views (scatter, network, heatmap).</p>
+<div class="flex gap-2 mt-4 flex-wrap">
+<span class="project-tag">NEXT.JS 14</span>
+<span class="project-tag">FASTAPI</span>
+<span class="project-tag">QDRANT</span>
+<span class="project-tag">FINBERT</span>
+<span class="project-tag">OLLAMA</span>
 </div>
-<a class="relative z-10 mono-text text-sm text-primary flex items-center gap-2 group/link" href="https://vitalistically-minuscular-jalen.ngrok-free.dev">
+</div>
+<a class="mono-text text-sm text-primary flex items-center gap-2 group/link" href="https://vitalistically-minuscular-jalen.ngrok-free.dev" target="_blank" rel="noreferrer">
                             LAUNCH_SYSTEM <span class="material-symbols-outlined transition-transform group-hover/link:translate-x-1">arrow_forward</span>
 </a>
 </div>
+</div>
 <!-- AI Stock Agent -->
-<div class="md:col-span-4 bg-surface-container rounded-xl p-8 flex flex-col justify-between ghost-border hover:bg-surface-container-high transition-all">
+<div class="project-card md:order-5 md:col-span-4 bg-surface-container rounded-xl p-8 flex flex-col justify-between ghost-border hover:bg-surface-container-high transition-all">
 <div>
 <h3 class="text-xl font-bold mb-2">AI Stock Agent</h3>
-<p class="text-outline text-sm leading-relaxed">MCP Server implementation for real-time yfinance data ingestion and LLM-driven stock synthesis.</p>
+<p class="text-outline text-sm leading-relaxed">FastAPI AI stock analyst with live yfinance data, tool-calling workflows, REST plus MCP interfaces, and multi-provider LLM orchestration.</p>
 </div>
 <div class="flex flex-wrap gap-2">
-<span class="mono-text text-[10px] text-on-surface-variant">MCP</span>
-<span class="mono-text text-[10px] text-on-surface-variant">FASTAPI</span>
+<span class="project-tag">FASTAPI</span>
+<span class="project-tag">MCP</span>
+<span class="project-tag">YFINANCE</span>
+<span class="project-tag">TOOL-CALLING</span>
+<span class="project-tag">PYTEST</span>
+</div>
+</div>
+<!-- Elastic SIEM -->
+<div class="project-card md:order-2 md:col-span-4 bg-surface-container rounded-xl overflow-hidden ghost-border group relative">
+<div class="absolute inset-0">
+<img alt="Elastic SIEM screenshot" class="project-shot w-full h-full object-cover group-hover:scale-105" src="resources/elastic%20siem%20ss.png"/>
+</div>
+<div class="absolute inset-0 project-overlay"></div>
+<div class="relative z-10 h-full p-8 flex flex-col justify-between">
+<div>
+<h3 class="text-xl font-bold mb-2">Elastic SIEM</h3>
+<p class="text-outline text-sm leading-relaxed">Lightweight behavioral SIEM on Elastic Stack with Sysmon and Elastic Agent ingestion, ECS mapping, ingest-time risk scoring, and Kibana detections.</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="project-tag">ELASTIC STACK</span>
+<span class="project-tag">ECS</span>
+<span class="project-tag">EQL RULES</span>
+<span class="project-tag">DOCKER</span>
+<span class="project-tag">PAINLESS</span>
+</div>
 </div>
 </div>
 <!-- Artisanal Brew -->
-<div class="md:col-span-4 bg-surface-container rounded-xl p-8 flex flex-col justify-between ghost-border group hover:bg-surface-container-high transition-all">
+<div class="project-card md:order-3 md:col-span-4 bg-surface-container rounded-xl overflow-hidden ghost-border group relative">
+<div class="absolute inset-0">
+<img alt="Artisanal Brew screenshot" class="project-shot w-full h-full object-cover group-hover:scale-105" src="resources/artisanal%20brew%20ss.png"/>
+</div>
+<div class="absolute inset-0 project-overlay"></div>
+<div class="relative z-10 h-full p-8 flex flex-col justify-between">
 <div>
 <h3 class="text-xl font-bold mb-2">Artisanal Brew</h3>
-<p class="text-outline text-sm leading-relaxed">E-commerce backend for specialty coffee, featuring Gemini Flash powered recommendation engine.</p>
+<p class="text-outline text-sm leading-relaxed">Specialty coffee brewing tracker with AI bean-cellar autofill, guided brew phases, taste analysis, recipes, analytics, and persistent cloud history.</p>
 </div>
 <div class="flex flex-wrap gap-2 mb-2">
-<span class="mono-text text-[10px] text-on-surface-variant">REACT 19</span>
-<span class="mono-text text-[10px] text-on-surface-variant">SUPABASE</span>
+<span class="project-tag">REACT 19</span>
+<span class="project-tag">VITE 8</span>
+<span class="project-tag">SUPABASE</span>
+<span class="project-tag">GEMINI 2.5</span>
+<span class="project-tag">TAILWIND CSS V4</span>
+<span class="project-tag">REACT ROUTER V7</span>
 </div>
-<a class="mono-text text-xs text-primary flex items-center gap-1" href="https://artisanal-brew-react.vercel.app/">
+<a class="mono-text text-xs text-primary flex items-center gap-1" href="https://artisanal-brew-react.vercel.app/" target="_blank" rel="noreferrer">
                             VIEW_LIVE <span class="material-symbols-outlined text-xs">open_in_new</span>
 </a>
 </div>
+</div>
 <!-- Insider Alerts -->
-<div class="md:col-span-12 bg-surface-container rounded-xl p-8 flex flex-col md:flex-row items-center justify-between ghost-border gap-8">
+<div class="project-card md:order-4 md:col-span-8 bg-surface-container rounded-xl overflow-hidden ghost-border group relative">
+<div class="absolute inset-0">
+<img alt="Insider Alerts Bot screenshot" class="project-shot w-full h-full object-cover group-hover:scale-105" src="resources/insider%20tele%20bot%20ss.png"/>
+</div>
+<div class="absolute inset-0 project-overlay-wide"></div>
+<div class="relative z-10 p-8 h-full flex flex-col md:flex-row items-center justify-between gap-8">
 <div class="flex items-center gap-6">
 <div class="w-16 h-16 bg-surface-container-highest rounded-lg flex items-center justify-center">
 <span class="material-symbols-outlined text-primary text-3xl">send</span>
 </div>
 <div>
 <h3 class="text-2xl font-bold">Insider Alerts Bot</h3>
-<p class="text-outline text-sm">Real-time Telegram notifications powered by Vercel Cron and Python scrapers.</p>
+<p class="text-outline text-sm">Daily US insider trade digest combining SEC Form 4 and congressional STOCK Act trades, delivered to Telegram through Vercel Cron automation.</p>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="project-tag">VERCEL CRON</span>
+<span class="project-tag">TELEGRAM BOT</span>
+<span class="project-tag">PYTHON</span>
+<span class="project-tag">SEC FILINGS</span>
+<span class="project-tag">STOCK ACT</span>
 </div>
 </div>
-<a class="bg-surface-container-highest px-6 py-3 rounded-lg mono-text text-sm border border-outline-variant/10 hover:border-primary/50 transition-all" href="https://t.me/insideralerts_derrick_bot">
+</div>
+<a class="bg-surface-container-highest px-6 py-3 rounded-lg mono-text text-sm border border-outline-variant/10 hover:border-primary/50 transition-all" href="https://t.me/insideralerts_derrick_bot" target="_blank" rel="noreferrer">
                             CONNECT_TELEGRAM
                         </a>
+</div>
 </div>
 </div>
 </div>
@@ -271,7 +476,8 @@
                     </h3>
 <ul class="space-y-3 mono-text text-sm text-outline">
 <li class="flex justify-between border-b border-outline-variant/10 pb-2"><span class="text-on-surface">Python</span> <span>EXPERT</span></li>
-<li class="flex justify-between border-b border-outline-variant/10 pb-2">SQL <span>EXPERT</span></li>
+<li class="flex justify-between border-b border-outline-variant/10 pb-2"><span class="text-on-surface">Java</span> <span>INTERMEDIATE</span></li>
+<li class="flex justify-between border-b border-outline-variant/10 pb-2"><span class="text-on-surface">SQL</span> <span>INTERMEDIATE</span></li>
 </ul>
 </div>
 <!-- Backend & AI -->
@@ -344,17 +550,149 @@
 <footer class="bg-[#131313] w-full py-16">
 <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-12 gap-8">
 <p class="font-['Geist_Mono'] text-sm uppercase tracking-widest text-[#859490]">
-                © 2024 Built with Precision.
+                © 2026 Built with Precision.
             </p>
-<div class="flex gap-8">
-<a class="font-['Geist_Mono'] text-sm uppercase tracking-widest text-[#859490] hover:text-[#e5e2e1] transition-opacity" href="#">GitHub</a>
-<a class="font-['Geist_Mono'] text-sm uppercase tracking-widest text-[#859490] hover:text-[#e5e2e1] transition-opacity" href="#">LinkedIn</a>
-<a class="font-['Geist_Mono'] text-sm uppercase tracking-widest text-[#859490] hover:text-[#e5e2e1] transition-opacity" href="#">Source</a>
-</div>
+<div></div>
 <div class="flex items-center gap-2">
 <span class="w-2 h-2 rounded-full bg-primary"></span>
 <span class="font-['Geist_Mono'] text-xs text-[#859490] uppercase tracking-tighter">System Nominal: 200 OK</span>
 </div>
 </div>
 </footer>
+<script>
+        (function () {
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            try {
+            var selectors = [
+                '#about .max-w-7xl > div',
+                '#experience .space-y-px > div',
+                '#projects .grid > div',
+                '#arsenal .grid > div'
+            ];
+            var targets = document.querySelectorAll(selectors.join(','));
+
+            targets.forEach(function (el, index) {
+                el.classList.add('reveal');
+                var delay = Math.min((index % 6) * 95, 475);
+                el.style.transitionDelay = delay + 'ms';
+            });
+
+            if (reduceMotion) {
+                targets.forEach(function (el) {
+                    el.classList.add('is-visible');
+                });
+                return;
+            }
+
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.16,
+                rootMargin: '0px 0px -80px 0px'
+            });
+
+            targets.forEach(function (el) {
+                observer.observe(el);
+            });
+
+            var projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(function (card) {
+                card.addEventListener('pointermove', function (e) {
+                    var rect = card.getBoundingClientRect();
+                    var mx = ((e.clientX - rect.left) / rect.width) * 100;
+                    var my = ((e.clientY - rect.top) / rect.height) * 100;
+                    card.style.setProperty('--mx', mx.toFixed(2) + '%');
+                    card.style.setProperty('--my', my.toFixed(2) + '%');
+                });
+            });
+
+            var shots = document.querySelectorAll('.project-shot');
+            var ticking = false;
+            function updateParallax() {
+                shots.forEach(function (shot) {
+                    var rect = shot.getBoundingClientRect();
+                    var center = rect.top + rect.height / 2;
+                    var viewportCenter = window.innerHeight / 2;
+                    var delta = (center - viewportCenter) / window.innerHeight;
+                    var offset = Math.max(-14, Math.min(14, -delta * 28));
+                    shot.style.setProperty('--parallax', offset.toFixed(2) + 'px');
+                });
+                ticking = false;
+            }
+            function requestParallax() {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            }
+            window.addEventListener('scroll', requestParallax, { passive: true });
+            window.addEventListener('resize', requestParallax);
+            requestParallax();
+
+            var sectionSnapLock = false;
+            var wheelDeltaBuffer = 0;
+            var wheelBufferTimer = null;
+
+            function handleSectionSnap(e) {
+                if (reduceMotion || sectionSnapLock || e.ctrlKey) {
+                    return;
+                }
+
+                wheelDeltaBuffer += e.deltaY;
+                if (wheelBufferTimer) {
+                    window.clearTimeout(wheelBufferTimer);
+                }
+                wheelBufferTimer = window.setTimeout(function () {
+                    wheelDeltaBuffer = 0;
+                }, 140);
+
+                if (Math.abs(wheelDeltaBuffer) < 70) {
+                    return;
+                }
+
+                var direction = wheelDeltaBuffer > 0 ? 1 : -1;
+                wheelDeltaBuffer = 0;
+
+                var sections = Array.prototype.slice.call(document.querySelectorAll('main > section'));
+                if (!sections.length) {
+                    return;
+                }
+
+                var navOffset = 88;
+                var currentPos = window.scrollY + navOffset + 4;
+                var currentIndex = 0;
+                sections.forEach(function (section, index) {
+                    if (section.offsetTop <= currentPos) {
+                        currentIndex = index;
+                    }
+                });
+
+                var targetIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
+                if (targetIndex === currentIndex) {
+                    return;
+                }
+
+                e.preventDefault();
+                sectionSnapLock = true;
+                window.scrollTo({
+                    top: Math.max(0, sections[targetIndex].offsetTop - navOffset),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function () {
+                    sectionSnapLock = false;
+                }, 700);
+            }
+
+            window.addEventListener('wheel', handleSectionSnap, { passive: false });
+            } catch (e) {
+                // no-op
+            }
+        })();
+    </script>
 </body></html>
