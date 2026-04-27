@@ -211,6 +211,47 @@
                 linear-gradient(90deg, rgba(19, 19, 19, 0.92) 0%, rgba(19, 19, 19, 0.84) 50%, rgba(19, 19, 19, 0.55) 100%),
                 radial-gradient(circle at 80% 20%, rgba(94, 234, 212, 0.1), transparent 44%);
         }
+        .modal-backdrop {
+            background: rgba(7, 9, 9, 0.84);
+            backdrop-filter: blur(7px);
+            opacity: 0;
+            transition: opacity 220ms ease;
+        }
+        .modal-shell {
+            width: min(1120px, calc(100vw - 2rem));
+            height: min(86vh, 820px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(14px) scale(0.985);
+            transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1), transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+        .modal-shell iframe {
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            border: 0;
+            border-radius: 0.5rem;
+            background: #000;
+        }
+        [data-rag-modal="true"].is-open {
+            opacity: 1;
+        }
+        [data-rag-modal="true"].is-open .modal-shell {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .modal-backdrop,
+            .modal-shell {
+                transition: none;
+            }
+        }
     </style>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
@@ -371,9 +412,15 @@
 <span class="project-tag">OLLAMA</span>
 </div>
 </div>
+<div class="flex flex-wrap items-center gap-3">
 <a class="mono-text text-sm text-primary flex items-center gap-2 group/link" href="https://vitalistically-minuscular-jalen.ngrok-free.dev" target="_blank" rel="noreferrer">
-                            LAUNCH_SYSTEM <span class="material-symbols-outlined transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+                                LAUNCH_SYSTEM <span class="material-symbols-outlined transition-transform group-hover/link:translate-x-1">arrow_forward</span>
 </a>
+<button class="inline-flex items-center gap-1.5 rounded-lg border border-primary/35 bg-surface-container/80 px-3 py-2 mono-text text-[11px] text-primary hover:bg-surface-container-high transition-colors" data-open-rag-modal="true" type="button">
+                                VIEW_RAG_ARCH
+                                <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
 </div>
 </div>
 <!-- AI Stock Agent -->
@@ -559,10 +606,88 @@
 </div>
 </div>
 </footer>
+<div aria-hidden="true" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 modal-backdrop" data-rag-modal="true" role="dialog" aria-label="RAG architecture preview">
+<div class="modal-shell rounded-xl border border-outline-variant/40 bg-surface-container-high shadow-2xl p-3 sm:p-4">
+<div class="mb-3 flex items-center justify-between gap-3 px-1">
+<p class="mono-text text-xs tracking-widest uppercase text-primary">FinSight RAG Architecture</p>
+<button aria-label="Close RAG architecture modal" class="inline-flex items-center justify-center rounded-md border border-outline-variant/30 bg-surface-container px-2.5 py-1.5 text-on-surface hover:border-primary/45 hover:text-primary transition-colors" data-close-rag-modal="true" type="button">
+<span class="material-symbols-outlined text-[18px] leading-none">close</span>
+</button>
+</div>
+<iframe loading="lazy" src="resources/RAG%20Architecture.html" title="RAG Architecture"></iframe>
+</div>
+</div>
 <script>
         (function () {
             var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             try {
+            var ragModal = document.querySelector('[data-rag-modal="true"]');
+            var openRagButtons = document.querySelectorAll('[data-open-rag-modal="true"]');
+            var closeRagButtons = document.querySelectorAll('[data-close-rag-modal="true"]');
+            var ragModalCloseTimer = null;
+            var modalTransitionMs = reduceMotion ? 0 : 260;
+
+            function closeRagModal() {
+                if (!ragModal) {
+                    return;
+                }
+                ragModal.classList.remove('is-open');
+                ragModal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-open');
+
+                if (ragModalCloseTimer) {
+                    window.clearTimeout(ragModalCloseTimer);
+                }
+
+                ragModalCloseTimer = window.setTimeout(function () {
+                    if (!ragModal.classList.contains('is-open')) {
+                        ragModal.classList.add('hidden');
+                        ragModal.classList.remove('flex');
+                    }
+                    ragModalCloseTimer = null;
+                }, modalTransitionMs);
+            }
+
+            function openRagModal() {
+                if (!ragModal) {
+                    return;
+                }
+                if (ragModalCloseTimer) {
+                    window.clearTimeout(ragModalCloseTimer);
+                    ragModalCloseTimer = null;
+                }
+                ragModal.classList.remove('hidden');
+                ragModal.classList.add('flex');
+                ragModal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-open');
+
+                window.requestAnimationFrame(function () {
+                    ragModal.classList.add('is-open');
+                });
+            }
+
+            openRagButtons.forEach(function (btn) {
+                btn.addEventListener('click', openRagModal);
+            });
+
+            closeRagButtons.forEach(function (btn) {
+                btn.addEventListener('click', closeRagModal);
+            });
+
+            if (ragModal) {
+                ragModal.addEventListener('click', function (event) {
+                    if (event.target === ragModal) {
+                        closeRagModal();
+                    }
+                });
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape' && !ragModal.classList.contains('hidden')) {
+                        closeRagModal();
+                    }
+                });
+            }
+
             var selectors = [
                 '#about .max-w-7xl > div',
                 '#experience .space-y-px > div',
@@ -639,7 +764,7 @@
             var wheelBufferTimer = null;
 
             function handleSectionSnap(e) {
-                if (reduceMotion || sectionSnapLock || e.ctrlKey) {
+                if (reduceMotion || sectionSnapLock || e.ctrlKey || document.body.classList.contains('modal-open')) {
                     return;
                 }
 
@@ -671,6 +796,24 @@
                         currentIndex = index;
                     }
                 });
+
+                var currentSection = sections[currentIndex];
+                if (!currentSection) {
+                    return;
+                }
+
+                var viewportTop = window.scrollY + navOffset;
+                var viewportBottom = window.scrollY + window.innerHeight;
+                var sectionTop = currentSection.offsetTop;
+                var sectionBottom = sectionTop + currentSection.offsetHeight;
+                var edgeThreshold = 120;
+                var nearSectionStart = (viewportTop - sectionTop) <= edgeThreshold;
+                var nearSectionEnd = (sectionBottom - viewportBottom) <= edgeThreshold;
+
+                // Only snap when the user is close to the section edge.
+                if ((direction > 0 && !nearSectionEnd) || (direction < 0 && !nearSectionStart)) {
+                    return;
+                }
 
                 var targetIndex = Math.max(0, Math.min(sections.length - 1, currentIndex + direction));
                 if (targetIndex === currentIndex) {
