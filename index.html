@@ -243,6 +243,13 @@
             opacity: 1;
             transform: translateY(0) scale(1);
         }
+        [data-infra-modal="true"].is-open {
+            opacity: 1;
+        }
+        [data-infra-modal="true"].is-open .modal-shell {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
         body.modal-open {
             overflow: hidden;
         }
@@ -405,11 +412,12 @@
 <h3 class="text-4xl font-bold mb-4 tracking-tighter">FinSight Dashboard</h3>
 <p class="text-outline leading-relaxed">Real-time financial sentiment dashboard with 5-minute ingestion, FinBERT scoring, Qdrant-backed RAG, and interactive chart views (scatter, network, heatmap).</p>
 <div class="flex gap-2 mt-4 flex-wrap">
-<span class="project-tag">NEXT.JS 14</span>
-<span class="project-tag">FASTAPI</span>
+<span class="project-tag">RAG PIPELINE</span>
 <span class="project-tag">QDRANT</span>
 <span class="project-tag">FINBERT</span>
-<span class="project-tag">OLLAMA</span>
+<span class="project-tag">NEXT.JS 14</span>
+<span class="project-tag">FASTAPI</span>
+<span class="project-tag">REAL-TIME</span>
 </div>
 </div>
 <div class="flex flex-wrap items-center gap-3">
@@ -430,10 +438,11 @@
 <p class="text-outline text-sm leading-relaxed">FastAPI AI stock analyst with live yfinance data, tool-calling workflows, REST plus MCP interfaces, and multi-provider LLM orchestration.</p>
 </div>
 <div class="flex flex-wrap gap-2">
+<span class="project-tag">AGENTIC AI</span>
+<span class="project-tag">MCP SERVER</span>
+<span class="project-tag">TOOL USE</span>
 <span class="project-tag">FASTAPI</span>
-<span class="project-tag">MCP</span>
-<span class="project-tag">YFINANCE</span>
-<span class="project-tag">TOOL-CALLING</span>
+<span class="project-tag">MULTI-PROVIDER LLM</span>
 <span class="project-tag">PYTEST</span>
 </div>
 </div>
@@ -450,10 +459,11 @@
 </div>
 <div class="flex flex-wrap gap-2">
 <span class="project-tag">ELASTIC STACK</span>
-<span class="project-tag">ECS</span>
-<span class="project-tag">EQL RULES</span>
+<span class="project-tag">SIEM</span>
+<span class="project-tag">THREAT DETECTION</span>
+<span class="project-tag">EQL</span>
 <span class="project-tag">DOCKER</span>
-<span class="project-tag">PAINLESS</span>
+<span class="project-tag">RISK SCORING</span>
 </div>
 </div>
 </div>
@@ -470,11 +480,11 @@
 </div>
 <div class="flex flex-wrap gap-2 mb-2">
 <span class="project-tag">REACT 19</span>
-<span class="project-tag">VITE 8</span>
 <span class="project-tag">SUPABASE</span>
-<span class="project-tag">GEMINI 2.5</span>
-<span class="project-tag">TAILWIND CSS V4</span>
+<span class="project-tag">GEMINI 2.5 FLASH</span>
+<span class="project-tag">TAILWIND V4</span>
 <span class="project-tag">REACT ROUTER V7</span>
+<span class="project-tag">FULL-STACK</span>
 </div>
 <a class="mono-text text-xs text-primary flex items-center gap-1" href="https://artisanal-brew-react.vercel.app/" target="_blank" rel="noreferrer">
                             VIEW_LIVE <span class="material-symbols-outlined text-xs">open_in_new</span>
@@ -499,14 +509,48 @@
 <span class="project-tag">VERCEL CRON</span>
 <span class="project-tag">TELEGRAM BOT</span>
 <span class="project-tag">PYTHON</span>
-<span class="project-tag">SEC FILINGS</span>
-<span class="project-tag">STOCK ACT</span>
+<span class="project-tag">SEC FORM 4</span>
+<span class="project-tag">SERVERLESS</span>
+<span class="project-tag">DATA PIPELINE</span>
 </div>
 </div>
 </div>
 <a class="bg-surface-container-highest px-6 py-3 rounded-lg mono-text text-sm border border-outline-variant/10 hover:border-primary/50 transition-all" href="https://t.me/insideralerts_derrick_bot" target="_blank" rel="noreferrer">
                             CONNECT_TELEGRAM
                         </a>
+</div>
+</div>
+<!-- InfraGraph AI -->
+<div class="project-card md:order-6 md:col-span-12 bg-surface-container rounded-xl overflow-hidden ghost-border group relative">
+<div class="absolute inset-0">
+<img alt="InfraGraph AI screenshot" class="project-shot w-full h-full object-cover group-hover:scale-105" src="resources/infragraph-ai%20ss.png"/>
+</div>
+<div class="absolute inset-0 project-overlay-wide"></div>
+<div class="relative z-10 p-8 h-full flex flex-col md:flex-row items-center justify-between gap-8">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-surface-container-highest rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-3xl">account_tree</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold">InfraGraph AI</h3>
+<p class="text-outline text-sm">Graph-powered infrastructure decision copilot. Uses the Karpathy wiki pattern—no vector DB, LLM acts as a semantic router over a handcrafted knowledge graph of 35 infrastructure pages with React Flow visualization.</p>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="project-tag">KARPATHY RAG</span>
+<span class="project-tag">KNOWLEDGE GRAPH</span>
+<span class="project-tag">REACT FLOW</span>
+<span class="project-tag">NEXT.JS 14</span>
+<span class="project-tag">FASTAPI</span>
+<span class="project-tag">OLLAMA</span>
+</div>
+</div>
+</div>
+<a class="mono-text text-sm text-primary flex items-center gap-2 group/link" href="https://epilogue-wolf-flyaway.ngrok-free.dev" target="_blank" rel="noreferrer">
+                                LAUNCH_SYSTEM <span class="material-symbols-outlined transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+<button class="inline-flex items-center gap-1.5 rounded-lg border border-primary/35 bg-surface-container/80 px-4 py-3 mono-text text-[11px] text-primary hover:bg-surface-container-high transition-colors shrink-0" data-open-infra-modal="true" type="button">
+VIEW_ARCH_DIAGRAM
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
 </div>
 </div>
 </div>
@@ -614,7 +658,18 @@
 <span class="material-symbols-outlined text-[18px] leading-none">close</span>
 </button>
 </div>
-<iframe loading="lazy" src="resources/RAG%20Architecture.html" title="RAG Architecture"></iframe>
+<iframe loading="lazy" src="resources/Agentic%20RAG%20Architecture%20finsight.html" title="RAG Architecture"></iframe>
+</div>
+</div>
+<div aria-hidden="true" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 modal-backdrop" data-infra-modal="true" role="dialog" aria-label="InfraGraph AI architecture preview">
+<div class="modal-shell rounded-xl border border-outline-variant/40 bg-surface-container-high shadow-2xl p-3 sm:p-4">
+<div class="mb-3 flex items-center justify-between gap-3 px-1">
+<p class="mono-text text-xs tracking-widest uppercase text-primary">InfraGraph AI — System Architecture</p>
+<button aria-label="Close InfraGraph architecture modal" class="inline-flex items-center justify-center rounded-md border border-outline-variant/30 bg-surface-container px-2.5 py-1.5 text-on-surface hover:border-primary/45 hover:text-primary transition-colors" data-close-infra-modal="true" type="button">
+<span class="material-symbols-outlined text-[18px] leading-none">close</span>
+</button>
+</div>
+<iframe loading="lazy" src="resources/Architecture%20infragraph-ai.html" title="InfraGraph AI Architecture"></iframe>
 </div>
 </div>
 <script>
@@ -684,6 +739,58 @@
                 document.addEventListener('keydown', function (event) {
                     if (event.key === 'Escape' && !ragModal.classList.contains('hidden')) {
                         closeRagModal();
+                    }
+                });
+            }
+
+            var infraModal = document.querySelector('[data-infra-modal="true"]');
+            var openInfraButtons = document.querySelectorAll('[data-open-infra-modal="true"]');
+            var closeInfraButtons = document.querySelectorAll('[data-close-infra-modal="true"]');
+            var infraModalCloseTimer = null;
+
+            function closeInfraModal() {
+                if (!infraModal) { return; }
+                infraModal.classList.remove('is-open');
+                infraModal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-open');
+                if (infraModalCloseTimer) { window.clearTimeout(infraModalCloseTimer); }
+                infraModalCloseTimer = window.setTimeout(function () {
+                    if (!infraModal.classList.contains('is-open')) {
+                        infraModal.classList.add('hidden');
+                        infraModal.classList.remove('flex');
+                    }
+                    infraModalCloseTimer = null;
+                }, modalTransitionMs);
+            }
+
+            function openInfraModal() {
+                if (!infraModal) { return; }
+                if (infraModalCloseTimer) {
+                    window.clearTimeout(infraModalCloseTimer);
+                    infraModalCloseTimer = null;
+                }
+                infraModal.classList.remove('hidden');
+                infraModal.classList.add('flex');
+                infraModal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-open');
+                window.requestAnimationFrame(function () {
+                    infraModal.classList.add('is-open');
+                });
+            }
+
+            openInfraButtons.forEach(function (btn) {
+                btn.addEventListener('click', openInfraModal);
+            });
+            closeInfraButtons.forEach(function (btn) {
+                btn.addEventListener('click', closeInfraModal);
+            });
+            if (infraModal) {
+                infraModal.addEventListener('click', function (event) {
+                    if (event.target === infraModal) { closeInfraModal(); }
+                });
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape' && !infraModal.classList.contains('hidden')) {
+                        closeInfraModal();
                     }
                 });
             }
